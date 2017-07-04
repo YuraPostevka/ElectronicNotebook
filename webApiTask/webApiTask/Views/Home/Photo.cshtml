@@ -1,0 +1,5 @@
+﻿@model webApiTask.Models.UserModel
+    @{ 
+        Layout = null;
+    }
+<img src="@(Model.ProfileImgUrl + "?dm=" + DateTime.Now.Ticks)" height="48" width="48" style="-moz-border-radius: 100px;border-radius: 100px;" />

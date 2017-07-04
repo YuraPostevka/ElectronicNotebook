@@ -1,0 +1,9 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <li><a href=@Url.Action("Logout", "Home")><span class="glyphicon glyphicon glyphicon-log-out" style="font-size:20px;"></span></a></li>
+
+}
+else
+{
+    <li><a href=@Url.Action("Login", "Home")><span class="glyphicon glyphicon glyphicon-log-in" style="font-size:20px;"></span></a></li>
+}

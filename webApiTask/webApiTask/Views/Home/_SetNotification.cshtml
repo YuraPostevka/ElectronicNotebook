@@ -1,0 +1,48 @@
+﻿
+<style>
+    .modal-body {
+        color: black;
+    }
+
+    .modal input, .modal button {
+        font-size: 30px;
+    }
+
+    .modal-title {
+        font-size: 30px;
+        color: black;
+    }
+</style>
+
+
+
+
+
+<!-- Modal -->
+<div id="notificationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" data-bind="template: { name: 'notification-template', afterRender:picker}">
+        </div>
+    </div>
+</div>
+
+<script id="notification-template" type="text/html">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title text-center">Notification</h4>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <input type="text" id="datetime24" data-format="DD-MM-YYYY HH:mm" data-template="DD / MM / YYYY     HH : mm" name="datetime" value="21-12-2012 20:30">
+            <input type="hidden" id="itemId" data-bind="value: Id" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default text-center" data-dismiss="modal" data-bind="click: SubmitNotification">Notify</button>
+    </div>
+
+</script>

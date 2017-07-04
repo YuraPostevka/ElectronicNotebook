@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNet.Identity;
+<link href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular" rel="stylesheet" type="text/css"><link href="~/Content/Home/jquery.tag-editor.css" rel="stylesheet" type="text/css" />
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <label id="topTags" onclick="Show_Hide()">Top 10 tags</label>
+}
+
+<div class="row topTags" style="display:none;">
+    @Html.Partial("_TopTags")
+</div>
+
+@Html.Partial("_SetNotification")
+
+<div class="page-content notes-board" data-bind="template: { name:'notes-board', data: $data}">
+</div>
+
+<br />
+<script type="text/html" id="notes-board">
+    <h1 class="tagName"></h1>
+    <label data-bind="click: $root.AddList" class="addItemLabel">Add new list</label>
+
+    <label id="exportToExcel" onclick="Export()">Export to Excel</label>
+
+
+    <ul class="toDoList" data-bind="foreach:{data: toDoLists }">
+        <li>
+            <a>
+                <h1 class="text-center">
+                    <span data-bind="inline: Name" class="text-center"></span>
+                    <span class="iconRight" data-bind="click: $root.removeList"><strong>X</strong></span>
+                    <span class="btn glyphicon glyphicon-plus" data-bind="click: $root.AddItem.bind($data.Items)"></span>
+                </h1>
+
+                <div data-bind="template:{ afterRender: findTag}">
+                    <div data-bind="template: { afterRender: bindTagsEditor  }">
+                        <input type="text" class="tag-editor" />
+                    </div>
+                </div>
+                <ul class="items" data-bind="foreach: {data:sortedItems }">
+                    <li>
+                        <input type="checkbox" data-bind="checked: IsCompleted" />
+                        <span class="glyphicon glyphicon-bell" data-toggle="modal" data-target="#notificationModal" data-bind="click: $root.bindNotification, css: {isNotify: IsNotify}"></span>
+
+                        <label class="textItem" data-bind="inline: Text, css: {isCompleted:  IsCompleted}, attr:{title:Text}"></label>
+                        <span data-bind="click: $root.removeItem.bind($data, $parent)" class="btn icon delicon glyphicon glyphicon-remove"></span>
+                    </li>
+                </ul>
+
+            </a>
+        </li>
+
+    </ul>
+</script>
+
+@section scripts{
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/HomePage")
+
+}

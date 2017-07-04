@@ -1,0 +1,82 @@
+﻿@model Models.DTO.ListTagDTO
+
+@{
+    ViewBag.Title = "Map";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body {
+        padding-top: 0;
+    }
+
+    .selected {
+        box-shadow: 10px 10px 7px rgba(0,0,0,.7) !important;
+        -webkit-transform: scale(1.1) !important;
+    }
+
+    .scrollDiv {
+        overflow-y: auto;
+        max-height: 600px;
+    }
+
+    .notes-board .list:hover {
+        box-shadow: 10px 10px 7px rgba(0,0,0,.7) !important;
+        -webkit-transform: scale(1.1) !important;
+        z-index: 5 !important;
+        cursor: default;
+    }
+
+    .glyphicon-globe {
+        font-size: 19px;
+         color: #999999;
+        margin: 5px;
+    }
+
+        .glyphicon-globe:hover {
+            color: black;
+            cursor: pointer;
+        }
+</style>
+
+<h1 class="text-center">Map</h1>
+
+
+<div class="row">
+
+    <div class="scrollDiv notes-board col-lg-2" data-bind="template: { name:'notes-board', data: $data}">
+    </div>
+
+    <div id="map" class="col-lg-10" style="height: 600px;"></div>
+
+</div>
+
+
+<script type="text/html" id="notes-board">
+
+    <ul class="toDoList" data-bind="foreach:{data: toDoLists }">
+
+        <li class="list" onclick="SetMarkerInCenter(this);">
+            <input type="hidden" data-bind="value:Id" id ="listId" />
+            <span class="glyphicon glyphicon-globe" style="float: right;" title="Set new mark on map" onclick="selectListViaSpan(this)"></span>
+            <div style="width:200px; height:auto; background:#ffc; color: black;">
+                <span data-bind="text: Name" class="text-center"></span>
+
+                <hr />
+                <ul class="items" data-bind="foreach: {data:sortedItems }">
+                    <li>
+                        <label data-bind="text:Text"></label>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+</script>
+
+
+@section scripts{
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDydJRbk1Eds1WuZrxnGx2mybQO5r7HAzg"></script>
+    @Scripts.Render("~/bundles/GoogleMaps")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/HomePage")
+}

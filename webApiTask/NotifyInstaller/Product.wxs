@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Name="Soft NotificationService"
+           Id="*"
+           UpgradeCode="cb6b6597-3c5a-4834-a4c9-99cb5bc88297"
+           Manufacturer="My Company"
+           Version="!(bind.FileVersion.NotificationService.exe)"
+           Language="1033">
+    <Package InstallerVersion="200"
+             Compressed="yes" />
+    <Media Id="1"
+           Cabinet="media1.cab"
+           EmbedCab="yes" />
+    <Directory Id="TARGETDIR"
+               Name="SourceDir">
+      <Directory Id="INSTALLDIR"
+                 Name="PFiles">
+        <Directory Id="Soft"
+                   Name="Soft">
+          <Directory Id="NotificationService"
+                     Name="NotificationService">
+            <Component Id="Soft.NotificationService"
+                       Guid="cb6b6597-3c5a-4834-a4c9-99cb5bc88297">
+              <File Id="NotificationService.exe"
+                    Name="NotificationService.exe"
+                    Source="..\NotificationService\bin\Debug\NotificationService.exe"
+                    Vital="yes"
+                    KeyPath="yes"
+                    DiskId="1" />
+              <File Id="NotificationService.exe.config"
+                    Name="NotificationService.exe.config"
+                    Source="..\NotificationService\bin\Debug\NotificationService.exe.config"
+                    Vital="yes"
+                    KeyPath="no"
+                    DiskId="1" />
+              <ServiceInstall Id="ServiceInstaller"
+                              Type="ownProcess"
+                              Vital="yes"
+                              Name="Soft:NotificationService"
+                              DisplayName="Soft:NotificationService"
+                              Description="My Product Description"
+                              Start="auto"
+                              Account="LocalSystem"
+                              ErrorControl="ignore"
+                              Interactive="no" />
+              <ServiceControl Id="StartService"
+                              Start="install"
+                              Stop="both"
+                              Remove="uninstall"
+                              Name="Soft:NotificationService"
+                              Wait="yes" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+    <Feature Id="ProductFeature"
+             Title="Soft:NotificationService"
+             Level="1">
+      <ComponentRef Id="Soft.NotificationService" />
+    </Feature>
+  </Product>
+</Wix>
+
+

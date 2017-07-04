@@ -1,0 +1,61 @@
+﻿@model webApiTask.Models.LoginBindingModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<form id="loginForm" action="@Url.Content("~/Home/Login")" method="post" enctype="multipart/form-data">
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <label class="control-label col-md-2">Email</label>
+            <div class="col-md-4">
+                <input id="userName" name="Email" type="text" value="@Model.Email" placeholder="placeholder" class="form-control input-md">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Password</label>
+            <div class="col-md-4">
+                <input id="password" name="Password" type="password" value="@Model.Password" placeholder="placeholder" class="form-control input-md">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Login" class="btn btn-default" id="submit" />
+            </div>
+        </div>
+    </div>
+
+</form>
+@section scripts{
+    <script src="/webApi/Scripts/jquery-3.1.1.js"></script>
+
+    <script>
+        $('#submit').click(function () {
+            //get email and pass
+            var email = $('#userName').val();
+            var password = $('#password').val();
+            $.ajax({
+                type: 'POST',
+                url: appContext.buildUrl('/Token'),
+                dataType: "json",
+                data: { "username": email, "password": password, "grant_type": "password" },
+                success: function (data) {
+
+                    var value = data.access_token
+                    document.cookie = 'token=' + value + ";path=/";
+                }
+            });
+
+            $('loginForm').submit();
+        });
+    </script>
+}
+

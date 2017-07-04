@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Discussion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Discussion</h2>
+
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .chat-dialog {
+        width: 400px;
+        min-height: 300px;
+        border: 3px solid #ccc;
+        border-radius: 10px;
+        margin: 20px;
+        padding: 10px;
+    }
+
+    .msg-controls {
+        margin-left: 20px;
+    }
+
+    .my-messages {
+        text-align: right;
+    }
+</style>
+<div>
+    <div class="enter-chat">
+        <input type="text" id="UserName" placeholder="Enter your name" />
+        <button id="EnterChat">Enter chat</button>
+    </div>
+    <div class="chat-box">
+        <div class="chat-dialog">
+        </div>
+        <div class="msg-controls">
+            <input type="text" id="Message" placeholder="Enter your message" />
+            <button id="SendMessage">Send</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var socketWorker = new socketWorker();
+        function socketWorker() {
+            var self = this;
+            self.ws = null;
+
+            self.init = function (name) {
+                var localhost = "ch976";
+                var socketProtocol = window.location.protocol == "https:" ? "wss" : "ws";
+                var socketUrl = socketProtocol + '://' + localhost + ':' + 8002;
+                var connection = new WebSocket(socketUrl, "123456");
+                // connection.binaryType = "arraybuffer";
+
+                // When the connection is open, send data to the server
+                connection.onopen = function () {
+                    connection.send("Name: " + name);
+                };
+
+                connection.onerror = function (error, data) {
+                    console.log('WebSocket Error ' + error);
+                };
+
+                connection.onmessage = function (e) {
+                    if (typeof e.data == "string") {
+                        $('.chat-dialog').append(e.data);
+                    }
+                    else {
+                        var k = e.data;
+                    }
+                };
+
+                connection.onclose = function (event) {
+                    var reason;
+                    var errorMSG = true;
+                    // See http://tools.ietf.org/html/rfc6455#section-7.4.1
+                };
+                self.ws = connection;
+            }
+
+            self.updateClients = function (msg) {
+                self.ws.send(msg);
+            }
+        }
+
+        $(document).ready(function () {
+
+            var name = "@User.Identity.GetUserName()";
+            myName = name;
+            socketWorker.init(name);
+
+
+            $("#SendMessage").click(function () {
+                var msg = $("#Message").val();
+                socketWorker.updateClients("msg: " + msg);
+                $(".chat-dialog").append("<div class='my-messages'><strong>" + myName + "</strong><span>  " + msg + "</span><div>");
+                $("#Message").val('');
+            });
+            $('#Message').bind("enterKey", function (e) {
+                var msg = $("#Message").val();
+                socketWorker.updateClients("msg: " + msg);
+                $(".chat-dialog").append("<div class='my-messages'><strong>" + myName + "</strong><span>  " + msg + "</span><div>");
+                $("#Message").val('');
+            });
+        });
+    </script>
+}
+
